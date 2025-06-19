@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Motivation Letter Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    label, textarea, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    textarea {
+      height: 60px;
+    }
+
+    #result {
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #f8f8f8;
+      display: none;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Motivation Letter Generator</h2>
+
+  <form id="letterForm">
+    <label>Program</label>
+    <input type="text" id="program" required>
+
+    <label>University</label>
+    <input type="text" id="university" required>
+
+    <label>Field of Study</label>
+    <input type="text" id="field" required>
+
+    <label>Your Experience</label>
+    <textarea id="experience" required></textarea>
+
+    <label>Your Career Goals</label>
+    <textarea id="goals" required></textarea>
+
+    <label>Preferred Tone (e.g. formal)</label>
+    <input type="text" id="tone" required>
+
+    <button type="submit">Generate Letter</button>
+  </form>
+
+  <div id="result">
+    <h4>Your Motivation Letter:</h4>
+    <p id="letterOutput"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("letterForm");
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const data = {
+        program: document.getElementById("program").value,
+        university: document.getElementById("university").value,
+        field: document.getElementById("field").value,
+        experience: document.getElementById("experience").value,
+        goals: document.getElementById("goals").value,
+        tone: document.getElementById("tone").value
+      };
+
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (result.letter) {
+        document.getElementById("letterOutput").textContent = result.letter;
+        document.getElementById("result").style.display = "block";
+      } else {
+        document.getElementById("letterOutput").textContent = "❌ Error generating letter.";
+      }
+    });
+  </script>
+</body>
+</html>
