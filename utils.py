@@ -29,6 +29,7 @@ The student has the following background:
 → Experience: {inputs['experience']}
 
 Career goals:
+
 → {inputs['goals']}
 
 Preferred tone:
